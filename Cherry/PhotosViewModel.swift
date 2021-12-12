@@ -30,11 +30,27 @@ final class PhotosViewModel: ObservableObject {
     }
     
     private func fetchPhotos() async -> [PHAsset] {
-        let result = PHAsset.fetchAssets(with: .image, options: nil)
+        let fetchOptions = PHFetchOptions()
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        let result = PHAsset.fetchAssets(with: .image, options: fetchOptions)
         var assets = [PHAsset]()
         result.enumerateObjects { asset, _, _ in
             assets.append(asset)
         }
         return assets
+    }
+}
+
+extension Array where Element == PHAsset {
+    func groupedByDate() -> Dictionary<String, [PHAsset]> {
+        return Dictionary(grouping: self, by: { $0.creationDate!.formatted() })
+    }
+}
+
+extension Date {
+    func formatted() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy.MM.dd"
+        return formatter.string(from: self)
     }
 }

@@ -17,18 +17,20 @@ struct GalleryView: View {
         GeometryReader { proxy in
             ScrollView {
                 LazyVStack {
-                    PhotosRow(title: Date().description) {
-                        LazyVGrid(columns: columns) {
-                            ForEach(photosViewModel.assets, id: \.localIdentifier) { asset in
-                                AsyncImage(
-                                    phasset: asset,
-                                    placeholder: { ProgressView() },
-                                    image: {
-                                        Image(uiImage: $0)
-                                            .resizable()
-                                    }
-                                )
-                                    .frame(width: floor(proxy.size.width / 5), height: floor(proxy.size.width / 5))
+                    ForEach(photosViewModel.assets.groupedByDate().sorted { $0.key > $1.key }, id: \.key) { key, value in
+                        PhotosRow(title: key) {
+                            LazyVGrid(columns: columns) {
+                                ForEach(value, id: \.localIdentifier) { asset in
+                                    AsyncImage(
+                                        phasset: asset,
+                                        placeholder: { ProgressView() },
+                                        image: {
+                                            Image(uiImage: $0)
+                                                .resizable()
+                                        }
+                                    )
+                                        .frame(width: floor(proxy.size.width / 5), height: floor(proxy.size.width / 5))
+                                }
                             }
                         }
                     }
