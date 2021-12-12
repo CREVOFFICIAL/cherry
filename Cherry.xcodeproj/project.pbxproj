@@ -10,6 +10,8 @@
 		D848B47127661017007A005E /* CherryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B47027661017007A005E /* CherryApp.swift */; };
 		D848B47527661018007A005E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47427661018007A005E /* Assets.xcassets */; };
 		D848B47827661018007A005E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47727661018007A005E /* Preview Assets.xcassets */; };
+		D848B4882766121F007A005E /* GalleryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B4862766121F007A005E /* GalleryView.swift */; };
+		D848B4892766121F007A005E /* PhotosRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B4872766121F007A005E /* PhotosRow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -17,6 +19,8 @@
 		D848B47027661017007A005E /* CherryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CherryApp.swift; sourceTree = "<group>"; };
 		D848B47427661018007A005E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D848B47727661018007A005E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D848B4862766121F007A005E /* GalleryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GalleryView.swift; sourceTree = "<group>"; };
+		D848B4872766121F007A005E /* PhotosRow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhotosRow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -50,6 +54,8 @@
 			isa = PBXGroup;
 			children = (
 				D848B47027661017007A005E /* CherryApp.swift */,
+				D848B4862766121F007A005E /* GalleryView.swift */,
+				D848B4872766121F007A005E /* PhotosRow.swift */,
 				D848B47427661018007A005E /* Assets.xcassets */,
 				D848B47627661018007A005E /* Preview Content */,
 			);
@@ -134,7 +140,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D848B4892766121F007A005E /* PhotosRow.swift in Sources */,
 				D848B47127661017007A005E /* CherryApp.swift in Sources */,
+				D848B4882766121F007A005E /* GalleryView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
