@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		D848B47127661017007A005E /* CherryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B47027661017007A005E /* CherryApp.swift */; };
-		D848B47327661017007A005E /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B47227661017007A005E /* ContentView.swift */; };
 		D848B47527661018007A005E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47427661018007A005E /* Assets.xcassets */; };
 		D848B47827661018007A005E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47727661018007A005E /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -16,7 +15,6 @@
 /* Begin PBXFileReference section */
 		D848B46D27661017007A005E /* Cherry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cherry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D848B47027661017007A005E /* CherryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CherryApp.swift; sourceTree = "<group>"; };
-		D848B47227661017007A005E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		D848B47427661018007A005E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D848B47727661018007A005E /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -52,7 +50,6 @@
 			isa = PBXGroup;
 			children = (
 				D848B47027661017007A005E /* CherryApp.swift */,
-				D848B47227661017007A005E /* ContentView.swift */,
 				D848B47427661018007A005E /* Assets.xcassets */,
 				D848B47627661018007A005E /* Preview Content */,
 			);
@@ -137,7 +134,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D848B47327661017007A005E /* ContentView.swift in Sources */,
 				D848B47127661017007A005E /* CherryApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -276,7 +272,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -305,7 +301,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
