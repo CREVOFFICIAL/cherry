@@ -8,12 +8,21 @@
 import Photos
 import SwiftUI
 
-final class PhotosViewModel: ObservableObject {
+final class PhotosViewModel: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
+    
     @Published var assets = [PHAsset]()
+    
+    private(set) var fetchResult: PHFetchResult<PHAsset>?
     
     func requestAuthorization() async -> Bool {
         let status = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
-        return status == .authorized
+        
+        if status == .authorized {
+            PHPhotoLibrary.shared().register(self)
+            return true
+        }
+        
+        return false
     }
     
     @MainActor
@@ -32,12 +41,23 @@ final class PhotosViewModel: ObservableObject {
     private func fetchPhotos() async -> [PHAsset] {
         let fetchOptions = PHFetchOptions()
         fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
-        let result = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        if fetchResult == nil {
+            fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
+        }
         var assets = [PHAsset]()
-        result.enumerateObjects { asset, _, _ in
+        fetchResult?.enumerateObjects { asset, _, _ in
             assets.append(asset)
         }
         return assets
+    }
+    
+    func photoLibraryDidChange(_ changeInstance: PHChange) {
+        Task { [weak self] in
+            if let changes = changeInstance.changeDetails(for: fetchResult!) {
+                self?.fetchResult = changes.fetchResultAfterChanges
+                await load()
+            }
+        }
     }
 }
 
@@ -47,7 +67,7 @@ extension Array where Element == PHAsset {
     }
 }
 
-extension Date {
+private extension Date {
     func formatted() -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy.MM.dd"
