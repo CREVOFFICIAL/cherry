@@ -7,10 +7,11 @@
 
 import Photos
 import SwiftUI
+import OrderedCollections
 
 final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
-    @Published var assets = Dictionary<String, [PHAsset]>()
+    @Published var assets = OrderedDictionary<String, [PHAsset]>()
     
     var keys: [String] {
         return Array(assets.keys)
@@ -43,20 +44,24 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
             guard await requestAuthorization() else { return }
             let grouped = await fetchPhotos().groupedByDate()
             let allResults = await withTaskGroup(of: (String, [PHAsset]).self,
-                                                 returning: [String: [PHAsset]].self,
+                                                 returning: OrderedDictionary<String, [PHAsset]>.self,
                                                  body: { taskGroup in
-                for key in grouped.keys {
+                let keys = grouped.keys
+                for key in keys {
                     taskGroup.addTask { [weak self] in
                         let extracted = await self?.extractSimilarAssets(from: grouped[key] ?? [])
-                        return (key, extracted ?? [])
+                        let sorted = extracted?.sorted { $0.creationDate! < $1.creationDate! } ?? []
+                        return (key, sorted)
                     }
                 }
                 
-                var childTaskResults = [String: [PHAsset]]()
+                var childTaskResults = OrderedDictionary<String, [PHAsset]>()
                 
                 for await (key, assets) in taskGroup {
                     childTaskResults[key] = assets
                 }
+                
+                childTaskResults.sort { $0.key > $1.key }
                 
                 return childTaskResults
             })

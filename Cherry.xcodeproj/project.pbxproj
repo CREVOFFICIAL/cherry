@@ -18,6 +18,9 @@
 		D848B48D27661343007A005E /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B48C27661343007A005E /* AsyncImage.swift */; };
 		D848B48F27661530007A005E /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B48E27661530007A005E /* PhotoLibrary.swift */; };
 		D848B493276656B6007A005E /* ImageSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B492276656B6007A005E /* ImageSliderView.swift */; };
+		D8536ECD276B85C20019C05F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ECC276B85C20019C05F /* Collections */; };
+		D8536ECF276B85C20019C05F /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ECE276B85C20019C05F /* DequeModule */; };
+		D8536ED1276B85C20019C05F /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ED0276B85C20019C05F /* OrderedCollections */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,7 +45,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8536ECD276B85C20019C05F /* Collections in Frameworks */,
 				D83CEA39276B2D7500435CD0 /* opencv2.framework in Frameworks */,
+				D8536ED1276B85C20019C05F /* OrderedCollections in Frameworks */,
+				D8536ECF276B85C20019C05F /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -117,6 +123,11 @@
 			dependencies = (
 			);
 			name = Cherry;
+			packageProductDependencies = (
+				D8536ECC276B85C20019C05F /* Collections */,
+				D8536ECE276B85C20019C05F /* DequeModule */,
+				D8536ED0276B85C20019C05F /* OrderedCollections */,
+			);
 			productName = Cherry;
 			productReference = D848B46D27661017007A005E /* Cherry.app */;
 			productType = "com.apple.product-type.application";
@@ -146,6 +157,9 @@
 				Base,
 			);
 			mainGroup = D848B46427661017007A005E;
+			packageReferences = (
+				D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			productRefGroup = D848B46E27661017007A005E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -399,6 +413,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D8536ECC276B85C20019C05F /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		D8536ECE276B85C20019C05F /* DequeModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = DequeModule;
+		};
+		D8536ED0276B85C20019C05F /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D848B46527661017007A005E /* Project object */;
 }
