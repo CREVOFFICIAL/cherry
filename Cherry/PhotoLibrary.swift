@@ -1,5 +1,5 @@
 //
-//  PhotosViewModel.swift
+//  PhotoLibrary.swift
 //  Cherry
 //
 //  Created by junyeong-cho on 2021/12/12.
@@ -8,9 +8,21 @@
 import Photos
 import SwiftUI
 
-final class PhotosViewModel: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
+final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
-    @Published var assets = [PHAsset]()
+    @Published var assets = Dictionary<String, [PHAsset]>()
+    
+    var keys: [String] {
+        return Array(assets.keys)
+    }
+    
+    func binding(for key: String) -> Binding<[PHAsset]> {
+        return Binding(get: {
+            return self.assets[key] ?? []
+        }, set: {
+            self.assets[key] = $0
+        })
+    }
     
     private(set) var fetchResult: PHFetchResult<PHAsset>?
     
@@ -32,7 +44,7 @@ final class PhotosViewModel: NSObject, ObservableObject, PHPhotoLibraryChangeObs
             let assets = await fetchPhotos()
             await MainActor.run {
                 withAnimation {
-                    self.assets = assets
+                    self.assets = assets.groupedByDate()
                 }
             }
         }

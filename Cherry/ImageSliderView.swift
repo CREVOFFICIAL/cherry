@@ -11,7 +11,7 @@ import SwiftUI
 struct ImageSliderView: View {
     
     @State private var focusedID: String
-    @State private(set) var phassets = [PHAsset]()
+    @Binding private var phassets: [PHAsset]
     
     var body: some View {
         GeometryReader { proxy in
@@ -60,9 +60,9 @@ struct ImageSliderView: View {
         }
     }
     
-    init(phassets: [PHAsset]) {
-        self.phassets = phassets
-        self.focusedID = phassets.first?.localIdentifier ?? ""
+    init(phassets: Binding<[PHAsset]>) {
+        self._phassets = phassets
+        self.focusedID = phassets.wrappedValue.first?.localIdentifier ?? ""
     }
 
     private func deletePhoto() {
@@ -70,11 +70,5 @@ struct ImageSliderView: View {
         PHPhotoLibrary.shared().performChanges({
             PHAssetChangeRequest.deleteAssets([asset] as NSArray)
         }, completionHandler: nil)
-    }
-}
-
-struct ImageSliderView_Previews: PreviewProvider {
-    static var previews: some View {
-        ImageSliderView(phassets: [])
     }
 }

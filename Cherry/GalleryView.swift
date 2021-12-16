@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Photos
 
 struct GalleryView: View {
     
-    @ObservedObject var photosViewModel = PhotosViewModel()
+    @ObservedObject var viewModel = PhotoLibrary()
     
     private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 5)
     
@@ -17,11 +18,11 @@ struct GalleryView: View {
         GeometryReader { proxy in
             ScrollView {
                 LazyVStack {
-                    ForEach(photosViewModel.assets.groupedByDate().sorted { $0.key > $1.key }, id: \.key) { date, phassets in
-                        NavigationLink(destination: ImageSliderView(phassets: phassets)) {
-                            PhotosRow(title: date) {
+                    ForEach(viewModel.keys, id: \.self) { key in
+                        NavigationLink(destination: ImageSliderView(phassets: viewModel.binding(for: key))) {
+                            PhotosRow(title: key) {
                                 LazyVGrid(columns: columns) {
-                                    ForEach(phassets, id: \.localIdentifier) { asset in
+                                    ForEach(viewModel.assets[key] ?? [], id: \.localIdentifier) { asset in
                                         AsyncImage(
                                             phasset: asset,
                                             placeholder: { ProgressView() },
@@ -39,7 +40,7 @@ struct GalleryView: View {
                 }
             }
             .task {
-                await photosViewModel.load()
+                await viewModel.load()
             }
             .toolbar {
                 ToolbarItem(placement: .principal) {
