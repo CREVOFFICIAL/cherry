@@ -20,8 +20,7 @@ struct GalleryView: View {
                 LazyVStack {
                     ForEach(viewModel.keys, id: \.self) { date in
                         NavigationLink(destination:
-                                        ImageSliderView(phassets: viewModel.binding(for: date))
-                                        .navigationTitle(date)
+                                        ImageSliderView(phassets: viewModel.binding(for: date), title: date)
                         ) {
                             PhotosRow(title: date) {
                                 LazyVGrid(columns: columns) {

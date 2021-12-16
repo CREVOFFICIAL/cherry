@@ -10,6 +10,8 @@ import SwiftUI
 
 struct ImageSliderView: View {
     
+    private let title: String
+    
     @State private var removeIDs = [String]()
     @State private var focusedID: String
     @Binding private var phassets: [PHAsset]
@@ -78,6 +80,7 @@ struct ImageSliderView: View {
                     }
                 }
             }
+            .navigationBarTitle(title)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Image(systemName: removeIDs.contains(focusedID) ? "checkmark.rectangle" : "plus.rectangle")
@@ -99,9 +102,10 @@ struct ImageSliderView: View {
         }
     }
     
-    init(phassets: Binding<[PHAsset]>) {
+    init(phassets: Binding<[PHAsset]>, title: String) {
         self._phassets = phassets
         self.focusedID = phassets.wrappedValue.first?.localIdentifier ?? ""
+        self.title = title
     }
     
     private func removeAll() {

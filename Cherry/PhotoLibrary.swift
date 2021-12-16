@@ -41,10 +41,29 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
     func load() async {
         Task {
             guard await requestAuthorization() else { return }
-            let assets = await fetchPhotos()
+            let grouped = await fetchPhotos().groupedByDate()
+            let allResults = await withTaskGroup(of: (String, [PHAsset]).self,
+                                                 returning: [String: [PHAsset]].self,
+                                                 body: { taskGroup in
+                for key in grouped.keys {
+                    taskGroup.addTask { [weak self] in
+                        let extracted = await self?.extractSimilarAssets(from: grouped[key] ?? [])
+                        return (key, extracted ?? [])
+                    }
+                }
+                
+                var childTaskResults = [String: [PHAsset]]()
+                
+                for await (key, assets) in taskGroup {
+                    childTaskResults[key] = assets
+                }
+                
+                return childTaskResults
+            })
+            
             await MainActor.run {
                 withAnimation {
-                    self.assets = assets.groupedByDate()
+                    self.assets = allResults
                 }
             }
         }
@@ -70,6 +89,33 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
                 await load()
             }
         }
+    }
+}
+
+private extension PhotoLibrary {
+    func extractSimilarAssets(from assets: [PHAsset]) async -> [PHAsset] {
+        var result = Set<PHAsset>()
+        
+        for asset in assets {
+            var images = [(asset: PHAsset, image: UIImage)]()
+            let loader = ImageLoader(phasset: asset, size: CGSize(width: 1, height: 1))
+            if let image = await loader.loadImage() {
+                images.append((asset, image))
+            }
+            
+            for sourceIndex in 0..<images.count {
+                for targetIndex in sourceIndex..<images.count {
+                    let source = images[sourceIndex]
+                    let target = images[targetIndex]
+                    let similarity = HistogramClassifier().computeSimilarity(source.image, targetImage: target.image)
+                    if similarity > 0.8 {
+                        result.insert(source.asset)
+                        result.insert(target.asset)
+                    }
+                }
+            }
+        }
+        return Array(result)
     }
 }
 
