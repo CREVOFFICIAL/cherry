@@ -12,16 +12,17 @@ struct AsyncImage<Placeholder: View>: View {
     @StateObject private var loader: ImageLoader
     
     private let placeholder: Placeholder
-    private let image: (UIImage) -> Image
+    private let image: (UIImage) -> (Image)
     
     init(
         phasset: PHAsset,
+        size: CGSize,
         @ViewBuilder placeholder: () -> Placeholder,
         @ViewBuilder image: @escaping (UIImage) -> Image = Image.init(uiImage:)
     ) {
         self.placeholder = placeholder()
         self.image = image
-        _loader = StateObject(wrappedValue: ImageLoader(phasset: phasset))
+        _loader = StateObject(wrappedValue: ImageLoader(phasset: phasset, size: size))
     }
     
     var body: some View {

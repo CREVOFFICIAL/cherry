@@ -18,13 +18,18 @@ struct GalleryView: View {
         GeometryReader { proxy in
             ScrollView {
                 LazyVStack {
-                    ForEach(viewModel.keys, id: \.self) { key in
-                        NavigationLink(destination: ImageSliderView(phassets: viewModel.binding(for: key))) {
-                            PhotosRow(title: key) {
+                    ForEach(viewModel.keys, id: \.self) { date in
+                        NavigationLink(destination:
+                                        ImageSliderView(phassets: viewModel.binding(for: date))
+                                        .navigationTitle(date)
+                        ) {
+                            PhotosRow(title: date) {
                                 LazyVGrid(columns: columns) {
-                                    ForEach(viewModel.assets[key] ?? [], id: \.localIdentifier) { asset in
+                                    ForEach(viewModel.assets[date] ?? [], id: \.localIdentifier) { asset in
                                         AsyncImage(
                                             phasset: asset,
+                                            size: CGSize(width: floor(proxy.size.width / 5) * UIScreen.main.scale,
+                                                         height: floor(proxy.size.width / 5) * UIScreen.main.scale),
                                             placeholder: { ProgressView() },
                                             image: {
                                                 Image(uiImage: $0)
@@ -39,6 +44,7 @@ struct GalleryView: View {
                     }
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
             .task {
                 await viewModel.load()
             }

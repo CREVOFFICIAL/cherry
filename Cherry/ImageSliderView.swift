@@ -15,34 +15,41 @@ struct ImageSliderView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            VStack {
-                TabView(selection: $focusedID) {
-                    ForEach(phassets, id: \.localIdentifier) { asset in
-                        AsyncImage(
-                            phasset: asset,
-                            placeholder: { ProgressView() },
-                            image: {
-                                Image(uiImage: $0)
-                                    .resizable()
-                            }
-                        )
-                            .tag(asset.localIdentifier)
+            VStack(spacing: 0) {
+                GeometryReader { proxy in
+                    TabView(selection: $focusedID) {
+                        ForEach(phassets, id: \.localIdentifier) { asset in
+                            AsyncImage(
+                                phasset: asset,
+                                size: CGSize(width: proxy.size.width * UIScreen.main.scale,
+                                             height: proxy.size.height * UIScreen.main.scale),
+                                placeholder: { ProgressView() },
+                                image: {
+                                    Image(uiImage: $0)
+                                        .resizable()
+                                }
+                            )
+                                .aspectRatio(contentMode: .fit)
+                                .tag(asset.localIdentifier)
+                        }
                     }
+                    .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 }
-                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 ScrollViewReader { proxy in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 2) {
                             ForEach(phassets, id: \.localIdentifier) { asset in
                                 AsyncImage(
                                     phasset: asset,
+                                    size: CGSize(width: 60 * UIScreen.main.scale,
+                                                 height: 60 * UIScreen.main.scale),
                                     placeholder: { ProgressView() },
                                     image: {
                                         Image(uiImage: $0)
                                             .resizable()
                                     }
                                 )
-                                    .frame(width: 50, height: 50)
+                                    .frame(width: 60, height: 60)
                                     .border(focusedID == asset.localIdentifier ? Color.black : Color.clear, width: 2)
                                     .onTapGesture {
                                         self.focusedID = asset.localIdentifier
@@ -50,6 +57,7 @@ struct ImageSliderView: View {
                             }
                         }
                     }
+                    .frame(height: 60)
                     .onChange(of: focusedID) { id in
                         withAnimation {
                             proxy.scrollTo(id)
@@ -63,12 +71,5 @@ struct ImageSliderView: View {
     init(phassets: Binding<[PHAsset]>) {
         self._phassets = phassets
         self.focusedID = phassets.wrappedValue.first?.localIdentifier ?? ""
-    }
-
-    private func deletePhoto() {
-        guard let asset = phassets.first(where: { $0.localIdentifier == focusedID }) else { return }
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.deleteAssets([asset] as NSArray)
-        }, completionHandler: nil)
     }
 }
