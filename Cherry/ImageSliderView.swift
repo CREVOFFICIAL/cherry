@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ImageSliderView: View {
     
+    @State private var removeIDs = [String]()
     @State private var focusedID: String
     @Binding private var phassets: [PHAsset]
     
@@ -54,6 +55,18 @@ struct ImageSliderView: View {
                                     .onTapGesture {
                                         self.focusedID = asset.localIdentifier
                                     }
+                                    .overlay(
+                                        VStack {
+                                            if removeIDs.contains(asset.localIdentifier) {
+                                                Image(systemName: "multiply.square")
+                                                    .resizable()
+                                                    .frame(width: 30, height: 30)
+                                                    .foregroundColor(Color(UIColor.systemRed))
+                                            }
+                                        }
+                                            .frame(width: 60, height: 60)
+                                            .background(removeIDs.contains(asset.localIdentifier) ? .black.opacity(0.1) : .clear)
+                                    )
                             }
                         }
                     }
@@ -65,11 +78,36 @@ struct ImageSliderView: View {
                     }
                 }
             }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Image(systemName: removeIDs.contains(focusedID) ? "checkmark.rectangle" : "plus.rectangle")
+                        .foregroundColor(Color(UIColor.systemBlue))
+                        .onTapGesture {
+                            if removeIDs.contains(focusedID) {
+                                removeIDs.removeAll(where: { $0 == focusedID })
+                            } else {
+                                removeIDs.append(focusedID)
+                            }
+                        }
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Button(action: removeAll) {
+                        Image(systemName: "trash")
+                    }
+                }
+            }
         }
     }
     
     init(phassets: Binding<[PHAsset]>) {
         self._phassets = phassets
         self.focusedID = phassets.wrappedValue.first?.localIdentifier ?? ""
+    }
+    
+    private func removeAll() {
+        let assets = phassets.filter { removeIDs.contains($0.localIdentifier) }
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.deleteAssets(assets as NSArray)
+        }, completionHandler: nil)
     }
 }
