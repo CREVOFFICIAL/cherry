@@ -14,9 +14,11 @@ final class ImageLoader: ObservableObject {
     private(set) var isLoading = false
     
     private let phasset: PHAsset
+    private let size: CGSize
     
-    init(phasset: PHAsset) {
+    init(phasset: PHAsset, size: CGSize = CGSize(width: 100, height: 100)) {
         self.phasset = phasset
+        self.size = size
     }
     
     @MainActor
@@ -33,14 +35,15 @@ final class ImageLoader: ObservableObject {
     }
     
     private func loadImage() async -> UIImage? {
-        return await withCheckedContinuation { continuation in
+        return await withCheckedContinuation { [weak self] continuation in
+            guard let self = self else { return }
             let manager = PHImageManager.default()
             let options = PHImageRequestOptions()
             options.isSynchronous = true
             options.deliveryMode = .highQualityFormat
             manager.requestImage(
-                for: phasset,
-                   targetSize: CGSize(width: 200, height: 200),
+                for: self.phasset,
+                   targetSize: self.size,
                    contentMode: .aspectFit,
                    options: options) { image, _ in
                        continuation.resume(with: .success(image))

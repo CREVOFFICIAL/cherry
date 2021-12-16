@@ -11,7 +11,9 @@ import SwiftUI
 struct CherryApp: App {
     var body: some Scene {
         WindowGroup {
-            GalleryView()
+            NavigationView {
+                GalleryView()
+            }
         }
     }
 }

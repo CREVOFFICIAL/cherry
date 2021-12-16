@@ -21,6 +21,7 @@ struct PhotosRow<Content: View>: View {
             content
             Text(title)
                 .font(.system(.callout))
+                .foregroundColor(.black)
         }
         .background(Color.white)
     }

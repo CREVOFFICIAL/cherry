@@ -6,10 +6,11 @@
 //
 
 import SwiftUI
+import Photos
 
 struct GalleryView: View {
     
-    @ObservedObject var photosViewModel = PhotosViewModel()
+    @ObservedObject var viewModel = PhotoLibrary()
     
     private let columns: [GridItem] = Array(repeating: .init(.flexible()), count: 5)
     
@@ -17,27 +18,40 @@ struct GalleryView: View {
         GeometryReader { proxy in
             ScrollView {
                 LazyVStack {
-                    ForEach(photosViewModel.assets.groupedByDate().sorted { $0.key > $1.key }, id: \.key) { key, value in
-                        PhotosRow(title: key) {
-                            LazyVGrid(columns: columns) {
-                                ForEach(value, id: \.localIdentifier) { asset in
-                                    AsyncImage(
-                                        phasset: asset,
-                                        placeholder: { ProgressView() },
-                                        image: {
-                                            Image(uiImage: $0)
-                                                .resizable()
-                                        }
-                                    )
-                                        .frame(width: floor(proxy.size.width / 5), height: floor(proxy.size.width / 5))
+                    ForEach(viewModel.keys, id: \.self) { date in
+                        NavigationLink(destination:
+                                        ImageSliderView(phassets: viewModel.binding(for: date))
+                                        .navigationTitle(date)
+                        ) {
+                            PhotosRow(title: date) {
+                                LazyVGrid(columns: columns) {
+                                    ForEach(viewModel.assets[date] ?? [], id: \.localIdentifier) { asset in
+                                        AsyncImage(
+                                            phasset: asset,
+                                            size: CGSize(width: floor(proxy.size.width / 5) * UIScreen.main.scale,
+                                                         height: floor(proxy.size.width / 5) * UIScreen.main.scale),
+                                            placeholder: { ProgressView() },
+                                            image: {
+                                                Image(uiImage: $0)
+                                                    .resizable()
+                                            }
+                                        )
+                                            .frame(width: floor(proxy.size.width / 5), height: floor(proxy.size.width / 5))
+                                    }
                                 }
                             }
                         }
                     }
                 }
             }
+            .navigationBarTitleDisplayMode(.inline)
             .task {
-                await photosViewModel.load()
+                await viewModel.load()
+            }
+            .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text("🍒 Cherry")
+                }
             }
         }
     }
