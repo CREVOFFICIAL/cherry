@@ -1,6 +1,11 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,cocoapods,xcode,swift,swiftpackagemanager
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,cocoapods,xcode,swift,swiftpackagemanager
 
+
+## Various settings
+xcuserdata/
+opencv2.framework/
+
 ### CocoaPods ###
 ## CocoaPods GitIgnore Template
 
