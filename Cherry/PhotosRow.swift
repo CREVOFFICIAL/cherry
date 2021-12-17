@@ -9,19 +9,21 @@ import SwiftUI
 
 struct PhotosRow<Content: View>: View {
     private let title: String
+    private let alignment: HorizontalAlignment
     private let content: Content
 
-    init(title: String, @ViewBuilder content: () -> Content) {
+    init(title: String, alignment: HorizontalAlignment = .leading, @ViewBuilder content: () -> Content) {
         self.title = title
+        self.alignment = alignment
         self.content = content()
     }
     
     var body: some View {
-        VStack {
-            content
+        VStack(alignment: alignment) {
             Text(title)
                 .font(.system(.callout))
-                .foregroundColor(.black)
+                .foregroundColor(.gray)
+            content
         }
         .background(Color.white)
     }
