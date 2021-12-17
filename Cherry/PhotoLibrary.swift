@@ -99,32 +99,33 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
 
 private extension PhotoLibrary {
     func extractSimilarAssets(from assets: [PHAsset]) async -> [PHAsset] {
+        var images = [(asset: PHAsset, image: UIImage)]()
         var result = Set<PHAsset>()
         
         for asset in assets {
-            var images = [(asset: PHAsset, image: UIImage)]()
             let loader = ImageLoader(phasset: asset, size: CGSize(width: 1, height: 1))
             if let image = await loader.loadImage() {
                 images.append((asset, image))
             }
-            
-            for sourceIndex in 0..<images.count {
-                for targetIndex in sourceIndex..<images.count {
-                    let source = images[sourceIndex]
-                    let target = images[targetIndex]
-                    let similarity = HistogramClassifier().computeSimilarity(source.image, targetImage: target.image)
-                    if similarity > 0.8 {
-                        result.insert(source.asset)
-                        result.insert(target.asset)
-                    }
+        }
+        
+        for sourceIndex in 0..<images.count {
+            for targetIndex in sourceIndex+1..<images.count {
+                let source = images[sourceIndex]
+                let target = images[targetIndex]
+                let similarity = HistogramClassifier().computeSimilarity(source.image, targetImage: target.image)
+                if similarity > 0.8 {
+                    result.insert(source.asset)
+                    result.insert(target.asset)
                 }
             }
         }
+        
         return Array(result)
     }
 }
 
-extension Array where Element == PHAsset {
+private extension Array where Element == PHAsset {
     func groupedByDate() -> Dictionary<String, [PHAsset]> {
         return Dictionary(grouping: self, by: { $0.creationDate!.formatted() })
     }
