@@ -19,23 +19,25 @@ struct GalleryView: View {
             ScrollView {
                 LazyVStack {
                     ForEach(viewModel.keys, id: \.self) { date in
-                        NavigationLink(destination:
-                                        ImageSliderView(phassets: viewModel.binding(for: date), title: date)
-                        ) {
-                            PhotosRow(title: date) {
-                                LazyVGrid(columns: columns) {
-                                    ForEach(viewModel.assets[date] ?? [], id: \.localIdentifier) { asset in
-                                        AsyncImage(
-                                            phasset: asset,
-                                            size: CGSize(width: floor(proxy.size.width / 5) * UIScreen.main.scale,
-                                                         height: floor(proxy.size.width / 5) * UIScreen.main.scale),
-                                            placeholder: { ProgressView() },
-                                            image: {
-                                                Image(uiImage: $0)
-                                                    .resizable()
-                                            }
-                                        )
-                                            .frame(width: floor(proxy.size.width / 5), height: floor(proxy.size.width / 5))
+                        if let assets = viewModel.assets[date], !assets.isEmpty {
+                            NavigationLink(destination:
+                                            ImageSliderView(phassets: viewModel.binding(for: date), title: date)
+                            ) {
+                                PhotosRow(title: date) {
+                                    LazyVGrid(columns: columns) {
+                                        ForEach(assets, id: \.localIdentifier) { asset in
+                                            AsyncImage(
+                                                phasset: asset,
+                                                size: CGSize(width: floor(proxy.size.width / 5) * UIScreen.main.scale,
+                                                             height: floor(proxy.size.width / 5) * UIScreen.main.scale),
+                                                placeholder: { ProgressView() },
+                                                image: {
+                                                    Image(uiImage: $0)
+                                                        .resizable()
+                                                }
+                                            )
+                                                .frame(width: floor(proxy.size.width / 5), height: floor(proxy.size.width / 5))
+                                        }
                                     }
                                 }
                             }
