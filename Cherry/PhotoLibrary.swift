@@ -11,13 +11,13 @@ import OrderedCollections
 
 final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
-    @Published var assets = OrderedDictionary<String, [PHAsset]>()
+    @Published var assets = OrderedDictionary<String, [Asset]>()
     
     var keys: [String] {
         return Array(assets.keys)
     }
     
-    func binding(for key: String) -> Binding<[PHAsset]> {
+    func binding(for key: String) -> Binding<[Asset]> {
         return Binding(get: {
             return self.assets[key] ?? []
         }, set: {
@@ -68,7 +68,7 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
             
             await MainActor.run {
                 withAnimation {
-                    self.assets = allResults
+                    self.assets = allResults.mapValues { $0.convert() }
                 }
             }
         }
@@ -125,7 +125,11 @@ private extension PhotoLibrary {
     }
 }
 
-private extension Array where Element == PHAsset {
+extension Array where Element == PHAsset {
+    func convert() -> [Asset] {
+        return self.map { Asset(phasset: $0) }
+    }
+    
     func groupedByDate() -> Dictionary<String, [PHAsset]> {
         return Dictionary(grouping: self, by: { $0.creationDate!.formatted() })
     }

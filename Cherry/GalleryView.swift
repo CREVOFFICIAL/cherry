@@ -21,7 +21,6 @@ struct GalleryView: View {
             ScrollView {
                 let side = (proxy.size.width - (spacing * CGFloat(photosRowCount - 1)) - padding * 2) / CGFloat(photosRowCount)
                 let item = GridItem(.fixed(side), spacing: spacing)
-                let columns = Array(repeating: item, count: photosRowCount)
                 VStack {
                     ForEach(viewModel.keys, id: \.self) { date in
                         // album
@@ -29,15 +28,15 @@ struct GalleryView: View {
                             NavigationLink(
                                 destination:
                                     ImageSliderView(
-                                        phassets: viewModel.binding(for: date),
+                                        assets: viewModel.binding(for: date),
                                         title: date
                                     )
                             ) {
                                 PhotosRow(title: date) {
-                                    LazyVGrid(columns: columns) {
-                                        ForEach(assets, id: \.localIdentifier) { asset in
+                                    LazyVGrid(columns: Array(repeating: item, count: photosRowCount)) {
+                                        ForEach(assets, id: \.id) { asset in
                                             AsyncImage(
-                                                phasset: asset,
+                                                phasset: asset.convert()!,
                                                 size: CGSize(width: side * UIScreen.main.scale,
                                                              height: side * UIScreen.main.scale),
                                                 placeholder: {
