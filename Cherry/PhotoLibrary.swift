@@ -7,16 +7,17 @@
 
 import Photos
 import SwiftUI
+import OrderedCollections
 
 final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
-    @Published var assets = Dictionary<String, [PHAsset]>()
+    @Published var assets = OrderedDictionary<String, [Asset]>()
     
     var keys: [String] {
         return Array(assets.keys)
     }
     
-    func binding(for key: String) -> Binding<[PHAsset]> {
+    func binding(for key: String) -> Binding<[Asset]> {
         return Binding(get: {
             return self.assets[key] ?? []
         }, set: {
@@ -41,10 +42,33 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
     func load() async {
         Task {
             guard await requestAuthorization() else { return }
-            let assets = await fetchPhotos()
+            let grouped = await fetchPhotos().groupedByDate()
+            let allResults = await withTaskGroup(of: (String, [PHAsset]).self,
+                                                 returning: OrderedDictionary<String, [PHAsset]>.self,
+                                                 body: { taskGroup in
+                let keys = grouped.keys
+                for key in keys {
+                    taskGroup.addTask { [weak self] in
+                        let extracted = await self?.extractSimilarAssets(from: grouped[key] ?? [])
+                        let sorted = extracted?.sorted { $0.creationDate! < $1.creationDate! } ?? []
+                        return (key, sorted)
+                    }
+                }
+                
+                var childTaskResults = OrderedDictionary<String, [PHAsset]>()
+                
+                for await (key, assets) in taskGroup {
+                    childTaskResults[key] = assets
+                }
+                
+                childTaskResults.sort { $0.key > $1.key }
+                
+                return childTaskResults
+            })
+            
             await MainActor.run {
                 withAnimation {
-                    self.assets = assets.groupedByDate()
+                    self.assets = allResults.mapValues { $0.convert() }
                 }
             }
         }
@@ -73,7 +97,39 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
     }
 }
 
+private extension PhotoLibrary {
+    func extractSimilarAssets(from assets: [PHAsset]) async -> [PHAsset] {
+        var images = [(asset: PHAsset, image: UIImage)]()
+        var result = Set<PHAsset>()
+        
+        for asset in assets {
+            let loader = ImageLoader(phasset: asset, size: CGSize(width: 1, height: 1))
+            if let image = await loader.loadImage() {
+                images.append((asset, image))
+            }
+        }
+        
+        for sourceIndex in 0..<images.count {
+            for targetIndex in sourceIndex+1..<images.count {
+                let source = images[sourceIndex]
+                let target = images[targetIndex]
+                let similarity = HistogramClassifier().computeSimilarity(source.image, targetImage: target.image)
+                if similarity > 0.8 {
+                    result.insert(source.asset)
+                    result.insert(target.asset)
+                }
+            }
+        }
+        
+        return Array(result)
+    }
+}
+
 extension Array where Element == PHAsset {
+    func convert() -> [Asset] {
+        return self.map { Asset(phasset: $0) }
+    }
+    
     func groupedByDate() -> Dictionary<String, [PHAsset]> {
         return Dictionary(grouping: self, by: { $0.creationDate!.formatted() })
     }

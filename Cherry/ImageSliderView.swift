@@ -10,18 +10,20 @@ import SwiftUI
 
 struct ImageSliderView: View {
     
+    private let title: String
+    
     @State private var removeIDs = [String]()
     @State private var focusedID: String
-    @Binding private var phassets: [PHAsset]
+    @Binding private var assets: [Asset]
     
     var body: some View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
                 GeometryReader { proxy in
                     TabView(selection: $focusedID) {
-                        ForEach(phassets, id: \.localIdentifier) { asset in
+                        ForEach(assets, id: \.id) { asset in
                             AsyncImage(
-                                phasset: asset,
+                                phasset: asset.convert()!,
                                 size: CGSize(width: proxy.size.width * UIScreen.main.scale,
                                              height: proxy.size.height * UIScreen.main.scale),
                                 placeholder: { ProgressView() },
@@ -31,7 +33,7 @@ struct ImageSliderView: View {
                                 }
                             )
                                 .aspectRatio(contentMode: .fit)
-                                .tag(asset.localIdentifier)
+                                .tag(asset.id)
                         }
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -39,9 +41,9 @@ struct ImageSliderView: View {
                 ScrollViewReader { proxy in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 2) {
-                            ForEach(phassets, id: \.localIdentifier) { asset in
+                            ForEach(assets, id: \.id) { asset in
                                 AsyncImage(
-                                    phasset: asset,
+                                    phasset: asset.convert()!,
                                     size: CGSize(width: 60 * UIScreen.main.scale,
                                                  height: 60 * UIScreen.main.scale),
                                     placeholder: { ProgressView() },
@@ -51,13 +53,13 @@ struct ImageSliderView: View {
                                     }
                                 )
                                     .frame(width: 60, height: 60)
-                                    .border(focusedID == asset.localIdentifier ? Color.black : Color.clear, width: 2)
+                                    .border(focusedID == asset.id ? Color.black : Color.clear, width: 2)
                                     .onTapGesture {
-                                        self.focusedID = asset.localIdentifier
+                                        self.focusedID = asset.id
                                     }
                                     .overlay(
                                         VStack {
-                                            if removeIDs.contains(asset.localIdentifier) {
+                                            if removeIDs.contains(asset.id) {
                                                 Image(systemName: "multiply.square")
                                                     .resizable()
                                                     .frame(width: 30, height: 30)
@@ -65,7 +67,7 @@ struct ImageSliderView: View {
                                             }
                                         }
                                             .frame(width: 60, height: 60)
-                                            .background(removeIDs.contains(asset.localIdentifier) ? .black.opacity(0.1) : .clear)
+                                            .background(removeIDs.contains(asset.id) ? .black.opacity(0.1) : .clear)
                                     )
                             }
                         }
@@ -78,6 +80,7 @@ struct ImageSliderView: View {
                     }
                 }
             }
+            .navigationBarTitle(title)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Image(systemName: removeIDs.contains(focusedID) ? "checkmark.rectangle" : "plus.rectangle")
@@ -99,15 +102,16 @@ struct ImageSliderView: View {
         }
     }
     
-    init(phassets: Binding<[PHAsset]>) {
-        self._phassets = phassets
-        self.focusedID = phassets.wrappedValue.first?.localIdentifier ?? ""
+    init(assets: Binding<[Asset]>, title: String) {
+        self._assets = assets
+        self.focusedID = assets.wrappedValue.first?.id ?? ""
+        self.title = title
     }
     
     private func removeAll() {
-        let assets = phassets.filter { removeIDs.contains($0.localIdentifier) }
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.deleteAssets(assets as NSArray)
-        }, completionHandler: nil)
+//        let phassets = assets.filter { removeIDs.contains($0.id) }.compactMap { $0.convert() }
+//        PHPhotoLibrary.shared().performChanges({
+//            PHAssetChangeRequest.deleteAssets(phassets as NSArray)
+//        }, completionHandler: nil)
     }
 }

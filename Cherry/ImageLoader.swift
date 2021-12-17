@@ -34,7 +34,7 @@ final class ImageLoader: ObservableObject {
         }
     }
     
-    private func loadImage() async -> UIImage? {
+    func loadImage() async -> UIImage? {
         return await withCheckedContinuation { [weak self] continuation in
             guard let self = self else { return }
             let manager = PHImageManager.default()

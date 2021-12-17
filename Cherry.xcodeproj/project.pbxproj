@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D83CEA39276B2D7500435CD0 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83CEA38276B2D7400435CD0 /* opencv2.framework */; };
+		D83CEA3D276B2DC200435CD0 /* HistogramClassifier.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */; };
 		D848B47127661017007A005E /* CherryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B47027661017007A005E /* CherryApp.swift */; };
 		D848B47527661018007A005E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47427661018007A005E /* Assets.xcassets */; };
 		D848B47827661018007A005E /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47727661018007A005E /* Preview Assets.xcassets */; };
@@ -16,9 +18,17 @@
 		D848B48D27661343007A005E /* AsyncImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B48C27661343007A005E /* AsyncImage.swift */; };
 		D848B48F27661530007A005E /* PhotoLibrary.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B48E27661530007A005E /* PhotoLibrary.swift */; };
 		D848B493276656B6007A005E /* ImageSliderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B492276656B6007A005E /* ImageSliderView.swift */; };
+		D8536ECD276B85C20019C05F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ECC276B85C20019C05F /* Collections */; };
+		D8536ECF276B85C20019C05F /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ECE276B85C20019C05F /* DequeModule */; };
+		D8536ED1276B85C20019C05F /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ED0276B85C20019C05F /* OrderedCollections */; };
+		D8536ED3276BEA680019C05F /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8536ED2276BEA680019C05F /* Asset.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D83CEA38276B2D7400435CD0 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		D83CEA3A276B2DC200435CD0 /* Cherry-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cherry-Bridging-Header.h"; sourceTree = "<group>"; };
+		D83CEA3B276B2DC200435CD0 /* HistogramClassifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistogramClassifier.h; sourceTree = "<group>"; };
+		D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HistogramClassifier.mm; sourceTree = "<group>"; };
 		D848B46D27661017007A005E /* Cherry.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Cherry.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D848B47027661017007A005E /* CherryApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CherryApp.swift; sourceTree = "<group>"; };
 		D848B47427661018007A005E /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -29,6 +39,7 @@
 		D848B48C27661343007A005E /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		D848B48E27661530007A005E /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
 		D848B492276656B6007A005E /* ImageSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSliderView.swift; sourceTree = "<group>"; };
+		D8536ED2276BEA680019C05F /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -36,17 +47,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8536ECD276B85C20019C05F /* Collections in Frameworks */,
+				D83CEA39276B2D7500435CD0 /* opencv2.framework in Frameworks */,
+				D8536ED1276B85C20019C05F /* OrderedCollections in Frameworks */,
+				D8536ECF276B85C20019C05F /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D83CEA37276B2D7400435CD0 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D83CEA38276B2D7400435CD0 /* opencv2.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D848B46427661017007A005E = {
 			isa = PBXGroup;
 			children = (
 				D848B46F27661017007A005E /* Cherry */,
 				D848B46E27661017007A005E /* Products */,
+				D83CEA37276B2D7400435CD0 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -68,8 +92,12 @@
 				D848B492276656B6007A005E /* ImageSliderView.swift */,
 				D848B48C27661343007A005E /* AsyncImage.swift */,
 				D848B48A276612EC007A005E /* ImageLoader.swift */,
+				D8536ED2276BEA680019C05F /* Asset.swift */,
 				D848B47427661018007A005E /* Assets.xcassets */,
 				D848B47627661018007A005E /* Preview Content */,
+				D83CEA3B276B2DC200435CD0 /* HistogramClassifier.h */,
+				D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */,
+				D83CEA3A276B2DC200435CD0 /* Cherry-Bridging-Header.h */,
 			);
 			path = Cherry;
 			sourceTree = "<group>";
@@ -98,6 +126,11 @@
 			dependencies = (
 			);
 			name = Cherry;
+			packageProductDependencies = (
+				D8536ECC276B85C20019C05F /* Collections */,
+				D8536ECE276B85C20019C05F /* DequeModule */,
+				D8536ED0276B85C20019C05F /* OrderedCollections */,
+			);
 			productName = Cherry;
 			productReference = D848B46D27661017007A005E /* Cherry.app */;
 			productType = "com.apple.product-type.application";
@@ -114,6 +147,7 @@
 				TargetAttributes = {
 					D848B46C27661017007A005E = {
 						CreatedOnToolsVersion = 13.0;
+						LastSwiftMigration = 1300;
 					};
 				};
 			};
@@ -126,6 +160,9 @@
 				Base,
 			);
 			mainGroup = D848B46427661017007A005E;
+			packageReferences = (
+				D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */,
+			);
 			productRefGroup = D848B46E27661017007A005E /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -152,9 +189,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8536ED3276BEA680019C05F /* Asset.swift in Sources */,
 				D848B48D27661343007A005E /* AsyncImage.swift in Sources */,
 				D848B4892766121F007A005E /* PhotosRow.swift in Sources */,
 				D848B47127661017007A005E /* CherryApp.swift in Sources */,
+				D83CEA3D276B2DC200435CD0 /* HistogramClassifier.mm in Sources */,
 				D848B48F27661530007A005E /* PhotoLibrary.swift in Sources */,
 				D848B48B276612EC007A005E /* ImageLoader.swift in Sources */,
 				D848B4882766121F007A005E /* GalleryView.swift in Sources */,
@@ -286,11 +325,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Cherry/Preview Content\"";
 				DEVELOPMENT_TEAM = Q988G87L89;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Use PhotoLibrary";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -307,6 +351,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.crev.Cherry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Cherry/Cherry-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -317,11 +363,16 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"Cherry/Preview Content\"";
 				DEVELOPMENT_TEAM = Q988G87L89;
 				ENABLE_PREVIEWS = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Use PhotoLibrary";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -338,6 +389,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.crev.Cherry;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "Cherry/Cherry-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -365,6 +417,35 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/apple/swift-collections.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		D8536ECC276B85C20019C05F /* Collections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = Collections;
+		};
+		D8536ECE276B85C20019C05F /* DequeModule */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = DequeModule;
+		};
+		D8536ED0276B85C20019C05F /* OrderedCollections */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D8536ECB276B85C20019C05F /* XCRemoteSwiftPackageReference "swift-collections" */;
+			productName = OrderedCollections;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = D848B46527661017007A005E /* Project object */;
 }
