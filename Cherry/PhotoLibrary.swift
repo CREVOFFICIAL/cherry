@@ -11,14 +11,14 @@ import OrderedCollections
 
 final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
-    @Published var assets = OrderedDictionary<String, [Asset]>()
-    @Published var authorizationStatus: PHAuthorizationStatus?
+    @Published var assets = OrderedDictionary<String, [PHAsset]>()
+    @Published var authorizationStatus: PHAuthorizationStatus? = .authorized
     
     var keys: [String] {
         return Array(assets.keys)
     }
     
-    func binding(for key: String) -> Binding<[Asset]> {
+    func binding(for key: String) -> Binding<[PHAsset]> {
         return Binding(get: {
             return self.assets[key] ?? []
         }, set: {
@@ -27,6 +27,12 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
     }
     
     private(set) var fetchResult: PHFetchResult<PHAsset>?
+    
+    override init() {
+        super.init()
+        
+        PHPhotoLibrary.shared().register(self)
+    }
     
     private func requestAuthorization() async -> PHAuthorizationStatus {
         return await withCheckedContinuation { continuation in
@@ -69,7 +75,7 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
             
             await MainActor.run {
                 withAnimation {
-                    self.assets = allResults.mapValues { $0.convert() }
+                    self.assets = allResults
                 }
             }
         }
@@ -127,10 +133,6 @@ private extension PhotoLibrary {
 }
 
 extension Array where Element == PHAsset {
-    func convert() -> [Asset] {
-        return self.map { Asset(phasset: $0) }
-    }
-    
     func groupedByDate() -> Dictionary<String, [PHAsset]> {
         return Dictionary(grouping: self, by: { $0.creationDate!.formatted() })
     }

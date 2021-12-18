@@ -29,16 +29,16 @@ struct GalleryView: View {
                         ForEach(viewModel.keys, id: \.self) { date in
                             if let assets = viewModel.assets[date], !assets.isEmpty {
                                 Section(date) {
-                                    ForEach(assets, id: \.id) { asset in
+                                    ForEach(assets, id: \.localIdentifier) { asset in
                                         NavigationLink(
                                             destination: ImageSliderView(
                                                 assets: viewModel.binding(for: date),
                                                 title: date,
-                                                selectedAsset: asset
+                                                selectedID: asset.localIdentifier
                                             )
                                         ) {
                                             AsyncImage(
-                                                phasset: asset.convert()!,
+                                                phasset: asset,
                                                 size: CGSize(width: side * UIScreen.main.scale,
                                                              height: side * UIScreen.main.scale),
                                                 placeholder: {

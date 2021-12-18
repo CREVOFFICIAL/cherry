@@ -11,19 +11,22 @@ import SwiftUI
 struct ImageSliderView: View {
     
     private let title: String
+    private let selectedID: String
     
+    @Environment(\.presentationMode) var presentationMode
+
     @State private var removeIDs = [String]()
-    @State private var focusedID: String
-    @Binding private var assets: [Asset]
+    @State private var focusedID: String = ""
+    @Binding private var assets: [PHAsset]
     
     var body: some View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
                 GeometryReader { proxy in
                     TabView(selection: $focusedID) {
-                        ForEach(assets, id: \.id) { asset in
+                        ForEach(assets, id: \.localIdentifier) { asset in
                             AsyncImage(
-                                phasset: asset.convert()!,
+                                phasset: asset,
                                 size: CGSize(width: proxy.size.width * UIScreen.main.scale,
                                              height: proxy.size.height * UIScreen.main.scale),
                                 placeholder: { ProgressView() },
@@ -33,7 +36,7 @@ struct ImageSliderView: View {
                                 }
                             )
                                 .aspectRatio(contentMode: .fit)
-                                .tag(asset.id)
+                                .tag(asset.localIdentifier)
                         }
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
@@ -41,9 +44,9 @@ struct ImageSliderView: View {
                 ScrollViewReader { proxy in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 2) {
-                            ForEach(assets, id: \.id) { asset in
+                            ForEach(assets, id: \.localIdentifier) { asset in
                                 AsyncImage(
-                                    phasset: asset.convert()!,
+                                    phasset: asset,
                                     size: CGSize(width: 60 * UIScreen.main.scale,
                                                  height: 60 * UIScreen.main.scale),
                                     placeholder: { ProgressView() },
@@ -53,10 +56,10 @@ struct ImageSliderView: View {
                                     }
                                 )
                                     .frame(width: 60, height: 60)
-                                    .border(focusedID == asset.id ? Color(UIColor.systemBlue) : Color.clear, width: 2)
+                                    .border(focusedID == asset.localIdentifier ? Color(UIColor.systemBlue) : Color.clear, width: 2)
                                     .overlay(
                                         VStack {
-                                            if removeIDs.contains(asset.id) {
+                                            if removeIDs.contains(asset.localIdentifier) {
                                                 Image(systemName: "multiply")
                                                     .resizable()
                                                     .frame(width: 30, height: 30)
@@ -64,10 +67,10 @@ struct ImageSliderView: View {
                                             }
                                         }
                                             .frame(width: 60, height: 60)
-                                            .background(removeIDs.contains(asset.id) ? .black.opacity(0.1) : .clear)
+                                            .background(removeIDs.contains(asset.localIdentifier) ? .black.opacity(0.1) : .clear)
                                     )
                                     .onTapGesture {
-                                        self.focusedID = asset.id
+                                        self.focusedID = asset.localIdentifier
                                     }
                             }
                         }
@@ -77,6 +80,10 @@ struct ImageSliderView: View {
                         withAnimation {
                             proxy.scrollTo(id)
                         }
+                    }
+                    .onAppear {
+                        focusedID = selectedID
+                        proxy.scrollTo(focusedID)
                     }
                 }
             }
@@ -94,7 +101,11 @@ struct ImageSliderView: View {
                         }
                 }
                 ToolbarItem(placement: .bottomBar) {
-                    Button(action: removePhotos) {
+                    Button(action: {
+                        Task {
+                            await remove()
+                        }
+                    }) {
                         Image(systemName: "trash")
                             .foregroundColor(Color(UIColor.systemGray))
                     }
@@ -103,16 +114,34 @@ struct ImageSliderView: View {
         }
     }
     
-    init(assets: Binding<[Asset]>, title: String, selectedAsset: Asset) {
-        self._assets = assets
-        self.focusedID = selectedAsset.id
+    init(assets: Binding<[PHAsset]>, title: String, selectedID: String) {
         self.title = title
+        self._assets = assets
+        self.selectedID = selectedID
     }
     
-    private func removePhotos() {
-        let phassets = assets.filter { removeIDs.contains($0.id) }.compactMap { $0.convert() }
-        PHPhotoLibrary.shared().performChanges({
-            PHAssetChangeRequest.deleteAssets(phassets as NSArray)
-        }, completionHandler: nil)
+    @MainActor
+    private func remove() async {
+        Task {
+            await removePhotos()
+            await MainActor.run {
+                withAnimation {
+                    presentationMode.wrappedValue.dismiss()
+                }
+            }
+        }
     }
+    
+    private func removePhotos() async {
+        return await withCheckedContinuation { continuation in
+            let assets = assets.filter { removeIDs.contains($0.localIdentifier) }
+            PHPhotoLibrary.shared().performChanges ({
+                PHAssetChangeRequest.deleteAssets(assets as NSArray)
+            }) { success, _ in
+                guard success else { return }
+                continuation.resume()
+            }
+        }
+    }
+    
 }

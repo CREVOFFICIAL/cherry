@@ -20,7 +20,6 @@
 		D8536ECD276B85C20019C05F /* Collections in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ECC276B85C20019C05F /* Collections */; };
 		D8536ECF276B85C20019C05F /* DequeModule in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ECE276B85C20019C05F /* DequeModule */; };
 		D8536ED1276B85C20019C05F /* OrderedCollections in Frameworks */ = {isa = PBXBuildFile; productRef = D8536ED0276B85C20019C05F /* OrderedCollections */; };
-		D8536ED3276BEA680019C05F /* Asset.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8536ED2276BEA680019C05F /* Asset.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -37,7 +36,6 @@
 		D848B48C27661343007A005E /* AsyncImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncImage.swift; sourceTree = "<group>"; };
 		D848B48E27661530007A005E /* PhotoLibrary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoLibrary.swift; sourceTree = "<group>"; };
 		D848B492276656B6007A005E /* ImageSliderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageSliderView.swift; sourceTree = "<group>"; };
-		D8536ED2276BEA680019C05F /* Asset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Asset.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +87,6 @@
 				D848B492276656B6007A005E /* ImageSliderView.swift */,
 				D848B48C27661343007A005E /* AsyncImage.swift */,
 				D848B48A276612EC007A005E /* ImageLoader.swift */,
-				D8536ED2276BEA680019C05F /* Asset.swift */,
 				D848B47427661018007A005E /* Assets.xcassets */,
 				D848B47627661018007A005E /* Preview Content */,
 				D83CEA3B276B2DC200435CD0 /* HistogramClassifier.h */,
@@ -186,7 +183,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8536ED3276BEA680019C05F /* Asset.swift in Sources */,
 				D848B48D27661343007A005E /* AsyncImage.swift in Sources */,
 				D848B47127661017007A005E /* CherryApp.swift in Sources */,
 				D83CEA3D276B2DC200435CD0 /* HistogramClassifier.mm in Sources */,
