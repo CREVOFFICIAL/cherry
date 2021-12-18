@@ -18,7 +18,9 @@ struct GalleryView: View {
     
     var body: some View {
         GeometryReader { proxy in
-            if viewModel.authorizationStatus == .authorized {
+            let status = viewModel.authorizationStatus
+            
+            if status == .authorized {
                 ScrollView {
                     let side = (proxy.size.width - (spacing * CGFloat(rowCount - 1)) - padding * 2) / CGFloat(rowCount)
                     let item = GridItem(.fixed(side), spacing: spacing)
@@ -31,7 +33,8 @@ struct GalleryView: View {
                                         NavigationLink(
                                             destination: ImageSliderView(
                                                 assets: viewModel.binding(for: date),
-                                                title: date
+                                                title: date,
+                                                selectedAsset: asset
                                             )
                                         ) {
                                             AsyncImage(
@@ -58,6 +61,8 @@ struct GalleryView: View {
                     }
                     .padding([.leading, .trailing], padding)
                 }
+            } else if status == nil {
+                EmptyView()
             } else {
                 VStack {
                     Spacer()

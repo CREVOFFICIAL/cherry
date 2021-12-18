@@ -53,14 +53,11 @@ struct ImageSliderView: View {
                                     }
                                 )
                                     .frame(width: 60, height: 60)
-                                    .border(focusedID == asset.id ? Color.black : Color.clear, width: 2)
-                                    .onTapGesture {
-                                        self.focusedID = asset.id
-                                    }
+                                    .border(focusedID == asset.id ? Color(UIColor.systemBlue) : Color.clear, width: 2)
                                     .overlay(
                                         VStack {
                                             if removeIDs.contains(asset.id) {
-                                                Image(systemName: "multiply.square")
+                                                Image(systemName: "multiply")
                                                     .resizable()
                                                     .frame(width: 30, height: 30)
                                                     .foregroundColor(Color(UIColor.systemRed))
@@ -69,6 +66,9 @@ struct ImageSliderView: View {
                                             .frame(width: 60, height: 60)
                                             .background(removeIDs.contains(asset.id) ? .black.opacity(0.1) : .clear)
                                     )
+                                    .onTapGesture {
+                                        self.focusedID = asset.id
+                                    }
                             }
                         }
                     }
@@ -94,24 +94,25 @@ struct ImageSliderView: View {
                         }
                 }
                 ToolbarItem(placement: .bottomBar) {
-                    Button(action: removeAll) {
+                    Button(action: removePhotos) {
                         Image(systemName: "trash")
+                            .foregroundColor(Color(UIColor.systemGray))
                     }
                 }
             }
         }
     }
     
-    init(assets: Binding<[Asset]>, title: String) {
+    init(assets: Binding<[Asset]>, title: String, selectedAsset: Asset) {
         self._assets = assets
-        self.focusedID = assets.wrappedValue.first?.id ?? ""
+        self.focusedID = selectedAsset.id
         self.title = title
     }
     
-    private func removeAll() {
-//        let phassets = assets.filter { removeIDs.contains($0.id) }.compactMap { $0.convert() }
-//        PHPhotoLibrary.shared().performChanges({
-//            PHAssetChangeRequest.deleteAssets(phassets as NSArray)
-//        }, completionHandler: nil)
+    private func removePhotos() {
+        let phassets = assets.filter { removeIDs.contains($0.id) }.compactMap { $0.convert() }
+        PHPhotoLibrary.shared().performChanges({
+            PHAssetChangeRequest.deleteAssets(phassets as NSArray)
+        }, completionHandler: nil)
     }
 }

@@ -12,7 +12,7 @@ import OrderedCollections
 final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
     @Published var assets = OrderedDictionary<String, [Asset]>()
-    @Published var authorizationStatus: PHAuthorizationStatus = .notDetermined
+    @Published var authorizationStatus: PHAuthorizationStatus?
     
     var keys: [String] {
         return Array(assets.keys)
