@@ -12,6 +12,7 @@ import OrderedCollections
 final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserver {
     
     @Published var assets = OrderedDictionary<String, [Asset]>()
+    @Published var authorizationStatus: PHAuthorizationStatus = .notDetermined
     
     var keys: [String] {
         return Array(assets.keys)
@@ -27,21 +28,21 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
     
     private(set) var fetchResult: PHFetchResult<PHAsset>?
     
-    func requestAuthorization() async -> Bool {
-        let status = await PHPhotoLibrary.requestAuthorization(for: .readWrite)
-        
-        if status == .authorized {
-            PHPhotoLibrary.shared().register(self)
-            return true
+    private func requestAuthorization() async -> PHAuthorizationStatus {
+        return await withCheckedContinuation { continuation in
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                continuation.resume(with: .success(status))
+            }
         }
-        
-        return false
     }
     
     @MainActor
     func load() async {
         Task {
-            guard await requestAuthorization() else { return }
+            authorizationStatus = await requestAuthorization()
+            
+            guard authorizationStatus == .authorized else { return }
+            
             let grouped = await fetchPhotos().groupedByDate()
             let allResults = await withTaskGroup(of: (String, [PHAsset]).self,
                                                  returning: OrderedDictionary<String, [PHAsset]>.self,
