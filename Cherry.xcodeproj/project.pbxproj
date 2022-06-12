@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		D83CEA39276B2D7500435CD0 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D83CEA38276B2D7400435CD0 /* opencv2.framework */; };
+		6FB9179A2856505400746FB3 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FB917992856505400746FB3 /* opencv2.framework */; };
 		D83CEA3D276B2DC200435CD0 /* HistogramClassifier.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */; };
 		D848B47127661017007A005E /* CherryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B47027661017007A005E /* CherryApp.swift */; };
 		D848B47527661018007A005E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47427661018007A005E /* Assets.xcassets */; };
@@ -23,7 +23,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		D83CEA38276B2D7400435CD0 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = opencv2.framework; sourceTree = "<group>"; };
+		6FB917992856505400746FB3 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = Cherry/opencv2.framework; sourceTree = "<group>"; };
 		D83CEA3A276B2DC200435CD0 /* Cherry-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cherry-Bridging-Header.h"; sourceTree = "<group>"; };
 		D83CEA3B276B2DC200435CD0 /* HistogramClassifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistogramClassifier.h; sourceTree = "<group>"; };
 		D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HistogramClassifier.mm; sourceTree = "<group>"; };
@@ -44,8 +44,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				D8536ECD276B85C20019C05F /* Collections in Frameworks */,
-				D83CEA39276B2D7500435CD0 /* opencv2.framework in Frameworks */,
 				D8536ED1276B85C20019C05F /* OrderedCollections in Frameworks */,
+				6FB9179A2856505400746FB3 /* opencv2.framework in Frameworks */,
 				D8536ECF276B85C20019C05F /* DequeModule in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -56,7 +56,7 @@
 		D83CEA37276B2D7400435CD0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				D83CEA38276B2D7400435CD0 /* opencv2.framework */,
+				6FB917992856505400746FB3 /* opencv2.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -326,6 +326,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Cherry",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Use PhotoLibrary";
@@ -340,7 +341,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.crev.Cherry;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.crev.Cherry-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Cherry/Cherry-Bridging-Header.h";
@@ -364,6 +365,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)",
+					"$(PROJECT_DIR)/Cherry",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Use PhotoLibrary";
@@ -378,7 +380,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.crev.Cherry;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.crev.Cherry-";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "Cherry/Cherry-Bridging-Header.h";

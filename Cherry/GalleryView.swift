@@ -10,99 +10,131 @@ import Photos
 
 struct GalleryView: View {
     
-    private let rowCount: Int = 5
-    private let spacing: CGFloat = 2
-    private let padding: CGFloat = 8
-    
     @ObservedObject var viewModel = PhotoLibrary()
     
     var body: some View {
-        GeometryReader { proxy in
-            let status = viewModel.authorizationStatus
-            
-            if status == .authorized {
-                ScrollView {
-                    let side = (proxy.size.width - (spacing * CGFloat(rowCount - 1)) - padding * 2) / CGFloat(rowCount)
-                    let item = GridItem(.fixed(side), spacing: spacing)
-                    
-                    LazyVGrid(columns: Array(repeating: item, count: rowCount), alignment: .leading) {
-                        ForEach(viewModel.keys, id: \.self) { date in
-                            if let assets = viewModel.assets[date], !assets.isEmpty {
-                                Section(date) {
-                                    ForEach(assets, id: \.localIdentifier) { asset in
-                                        NavigationLink(
-                                            destination: ImageSliderView(
-                                                assets: viewModel.binding(for: date),
-                                                title: date,
-                                                selectedID: asset.localIdentifier
-                                            )
-                                        ) {
-                                            AsyncImage(
-                                                phasset: asset,
-                                                size: CGSize(width: side * UIScreen.main.scale,
-                                                             height: side * UIScreen.main.scale),
-                                                placeholder: {
-                                                    ProgressView()
-                                                },
-                                                image: {
-                                                    Image(uiImage: $0)
-                                                        .resizable()
-                                                }
-                                            )
-                                                .frame(width: side, height: side)
-                                                .clipped()
-                                        }
-                                    }
-                                }
-                                .font(.system(.callout))
-                                .foregroundColor(.gray)
-                            }
-                        }
-                    }
-                    .padding([.leading, .trailing], padding)
-                }
-            } else if status == nil {
-                EmptyView()
+        Group {
+            if viewModel.authorizationStatus == .authorized {
+                PhotosCollectionView()
+                    .environmentObject(viewModel)
             } else {
-                VStack {
-                    Spacer()
-                    VStack(spacing: 16) {
-                        Text("Cherry App can't access the photo libary.\nGo to Settings and allow Photos App access permission")
-                            .font(.system(.callout))
-                            .multilineTextAlignment(.center)
-                        Button(action: gotoPrivacySettings) {
-                            Text("Go to Settings")
-                                .font(.system(.callout))
-                                .foregroundColor(Color(UIColor.systemBlue))
-                                .padding(6)
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 4)
-                                        .stroke(Color(UIColor.systemBlue), lineWidth: 1)
-                                )
-                        }
-                    }
-                    Spacer()
-                }
-                .frame(maxWidth: proxy.size.width)
+                PhotoAuthorizationView(
+                    title: R.string.photoPermission,
+                    message: R.string.openSettings,
+                    buttonAction: openSettings
+                )
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal, C.padding)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .principal) {
+                Text(R.string.navigationTitle)
+            }
+        }
         .task {
             await viewModel.load()
         }
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("🍒 Cherry")
+    }
+}
+
+struct PhotosCollectionView: View {
+    
+    @EnvironmentObject var viewModel: PhotoLibrary
+    
+    var body: some View {
+        let side: CGFloat = C.side
+        let item = GridItem(.fixed(side), spacing: C.spacing)
+        let columns = Array(repeating: item, count: C.rowCount)
+        
+        ScrollView {
+            LazyVGrid(columns: columns, alignment: .leading) {
+                ForEach(viewModel.keys, id: \.self) { date in
+                    if let assets = viewModel.assets[date], !assets.isEmpty {
+                        Section(date) {
+                            ForEach(assets, id: \.localIdentifier) { asset in
+                                NavigationLink(
+                                    destination: ImageSliderView(
+                                        assets: viewModel.binding(for: date),
+                                        title: date,
+                                        selectedID: asset.localIdentifier
+                                    )
+                                ) {
+                                    AsyncImage(
+                                        phasset: asset,
+                                        size: CGSize(width: side * UIScreen.main.scale,
+                                                     height: side * UIScreen.main.scale),
+                                        placeholder: {
+                                            ProgressView()
+                                        },
+                                        image: {
+                                            Image(uiImage: $0)
+                                                .resizable()
+                                        }
+                                    )
+                                        .frame(width: side, height: side)
+                                        .clipped()
+                                }
+                            }
+                        }
+                        .font(.system(.callout))
+                        .foregroundColor(.gray)
+                    } else {
+                        EmptyView()
+                    }
+                }
+            }
+        }
+    }
+}
+
+struct PhotoAuthorizationView: View {
+    let title: String
+    let message: String
+    let buttonAction: () -> Void
+    
+    var body: some View {
+        ZStack(alignment: Alignment(horizontal: .center, vertical: .center)) {
+            VStack(spacing: 16) {
+                Text(title)
+                    .font(.system(.callout))
+                    .multilineTextAlignment(.center)
+                Button(action: buttonAction) {
+                    Text(message)
+                        .font(.system(.callout))
+                        .foregroundColor(Color(UIColor.systemBlue))
+                        .padding(6)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 4)
+                                .stroke(Color(UIColor.systemBlue), lineWidth: 1)
+                        )
+                }
             }
         }
     }
 }
 
 private extension GalleryView {
-    func gotoPrivacySettings() {
+    func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString),
               UIApplication.shared.canOpenURL(url) else { return }
 
         UIApplication.shared.open(url, options: [:], completionHandler: nil)
+    }
+}
+
+fileprivate struct C {
+    static let side: CGFloat = 60
+    static let rowCount: Int = 5
+    static let spacing: CGFloat = 2
+    static let padding: CGFloat = 8
+}
+
+fileprivate struct R {
+    struct string {
+        static let navigationTitle = "🍒 Cherry"
+        static let photoPermission = "Cherry App can't access the photo libary.\nGo to Settings and allow Photos App access permission"
+        static let openSettings = "Go to Settings"
     }
 }

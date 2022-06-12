@@ -83,7 +83,7 @@ final class PhotoLibrary: NSObject, ObservableObject, PHPhotoLibraryChangeObserv
     
     private func fetchPhotos() async -> [PHAsset] {
         let fetchOptions = PHFetchOptions()
-        fetchOptions.sortDescriptors = [NSSortDescriptor(key: "creationDate", ascending: true)]
+        fetchOptions.sortDescriptors = [NSSortDescriptor(key: FetchingKey.creationDate, ascending: true)]
         if fetchResult == nil {
             fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
         }
@@ -129,6 +129,12 @@ private extension PhotoLibrary {
         }
         
         return Array(result)
+    }
+}
+
+private extension PhotoLibrary {
+    struct FetchingKey {
+        static let creationDate = "creationDate"
     }
 }
 

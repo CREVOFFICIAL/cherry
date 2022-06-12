@@ -47,35 +47,37 @@ struct ImageSliderView: View {
                             ForEach(assets, id: \.localIdentifier) { asset in
                                 AsyncImage(
                                     phasset: asset,
-                                    size: CGSize(width: 60 * UIScreen.main.scale,
-                                                 height: 60 * UIScreen.main.scale),
+                                    size: CGSize(width: C.cellSize.width * UIScreen.main.scale,
+                                                 height: C.cellSize.height * UIScreen.main.scale),
                                     placeholder: { ProgressView() },
                                     image: {
                                         Image(uiImage: $0)
                                             .resizable()
                                     }
                                 )
-                                    .frame(width: 60, height: 60)
+                                    .frame(width: C.cellSize.width,
+                                           height: C.cellSize.height)
                                     .border(focusedID == asset.localIdentifier ? Color(UIColor.systemBlue) : Color.clear, width: 2)
                                     .overlay(
                                         VStack {
                                             if removeIDs.contains(asset.localIdentifier) {
-                                                Image(systemName: "multiply")
+                                                Image(systemName: R.image.multiply)
                                                     .resizable()
-                                                    .frame(width: 30, height: 30)
+                                                    .frame(width: C.multiplyImageSize.width, height: C.multiplyImageSize.height)
                                                     .foregroundColor(Color(UIColor.systemRed))
                                             }
                                         }
-                                            .frame(width: 60, height: 60)
+                                            .frame(width: C.cellSize.width, height: C.cellSize.height)
                                             .background(removeIDs.contains(asset.localIdentifier) ? .black.opacity(0.1) : .clear)
                                     )
+                                    .clipShape(Rectangle())
                                     .onTapGesture {
                                         self.focusedID = asset.localIdentifier
                                     }
                             }
                         }
                     }
-                    .frame(height: 60)
+                    .frame(height: C.sliderHeight)
                     .onChange(of: focusedID) { id in
                         withAnimation {
                             proxy.scrollTo(id)
@@ -90,7 +92,7 @@ struct ImageSliderView: View {
             .navigationBarTitle(title)
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Image(systemName: removeIDs.contains(focusedID) ? "checkmark.rectangle" : "plus.rectangle")
+                    Image(systemName: removeIDs.contains(focusedID) ? R.image.checkmark : R.image.plus)
                         .foregroundColor(Color(UIColor.systemBlue))
                         .onTapGesture {
                             if removeIDs.contains(focusedID) {
@@ -106,7 +108,7 @@ struct ImageSliderView: View {
                             await remove()
                         }
                     }) {
-                        Image(systemName: "trash")
+                        Image(systemName: R.image.trash)
                             .foregroundColor(Color(UIColor.systemGray))
                     }
                 }
@@ -144,4 +146,19 @@ struct ImageSliderView: View {
         }
     }
     
+}
+
+fileprivate struct C {
+    static let cellSize: CGSize = .init(width: 60, height: 60)
+    static let sliderHeight: CGFloat = 60
+    static let multiplyImageSize: CGSize = .init(width: 30, height: 30)
+}
+
+fileprivate struct R {
+    struct image {
+        static let multiply = "multiply"
+        static let checkmark = "checkmark.rectangle"
+        static let plus = "plus.rectangle"
+        static let trash = "trash"
+    }
 }

@@ -16,7 +16,7 @@ final class ImageLoader: ObservableObject {
     private let phasset: PHAsset
     private let size: CGSize
     
-    init(phasset: PHAsset, size: CGSize = CGSize(width: 100, height: 100)) {
+    init(phasset: PHAsset, size: CGSize = C.imageSize) {
         self.phasset = phasset
         self.size = size
     }
@@ -50,4 +50,8 @@ final class ImageLoader: ObservableObject {
                    }
         }
     }
+}
+
+fileprivate struct C {
+    static let imageSize: CGSize = .init(width: 100, height: 100)
 }
