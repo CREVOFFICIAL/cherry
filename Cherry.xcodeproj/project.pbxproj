@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6FB9179A2856505400746FB3 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6FB917992856505400746FB3 /* opencv2.framework */; };
+		6F614D192859FFA100524681 /* AssetFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F614D182859FFA100524681 /* AssetFetcher.swift */; };
 		D83CEA3D276B2DC200435CD0 /* HistogramClassifier.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */; };
 		D848B47127661017007A005E /* CherryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B47027661017007A005E /* CherryApp.swift */; };
 		D848B47527661018007A005E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47427661018007A005E /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 
 /* Begin PBXFileReference section */
 		6FB917992856505400746FB3 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = Cherry/opencv2.framework; sourceTree = "<group>"; };
+		6F614D182859FFA100524681 /* AssetFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetFetcher.swift; sourceTree = "<group>"; };
 		D83CEA3A276B2DC200435CD0 /* Cherry-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cherry-Bridging-Header.h"; sourceTree = "<group>"; };
 		D83CEA3B276B2DC200435CD0 /* HistogramClassifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistogramClassifier.h; sourceTree = "<group>"; };
 		D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HistogramClassifier.mm; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				D83CEA3B276B2DC200435CD0 /* HistogramClassifier.h */,
 				D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */,
 				D83CEA3A276B2DC200435CD0 /* Cherry-Bridging-Header.h */,
+				6F614D182859FFA100524681 /* AssetFetcher.swift */,
 			);
 			path = Cherry;
 			sourceTree = "<group>";
@@ -189,6 +192,7 @@
 				D848B48F27661530007A005E /* PhotoLibrary.swift in Sources */,
 				D848B48B276612EC007A005E /* ImageLoader.swift in Sources */,
 				D848B4882766121F007A005E /* GalleryView.swift in Sources */,
+				6F614D192859FFA100524681 /* AssetFetcher.swift in Sources */,
 				D848B493276656B6007A005E /* ImageSliderView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
