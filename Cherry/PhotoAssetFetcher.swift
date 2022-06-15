@@ -19,7 +19,7 @@ struct PhotoAsset: Equatable {
     }
 }
 
-struct PhotoAssetFetcher {
+class PhotoAssetFetcher {
     struct Request {
         enum SortOrder {
             case latest
@@ -27,20 +27,33 @@ struct PhotoAssetFetcher {
         }
         let count: Int = 20
         let sortOrder: SortOrder = .latest
+        let date: Date = .init()
     }
     
-    func fetch(request: Request) -> [PhotoAsset] {
+    func fetch(request: Request) async throws -> [PhotoAsset] {
+        let status = await requestAuthorization()
+        guard status == .authorized || status == .limited else {
+            throw PhotoAssetFetcher.Error.notAuthorized
+        }
         let fetchOptions = PHFetchOptions()
         fetchOptions.fetchLimit = request.count
         switch request.sortOrder {
         case .latest:
+            fetchOptions.predicate = NSPredicate(format: "(\(Key.creationDate) < %@)", request.date as NSDate)
             fetchOptions.sortDescriptors = [
-                NSSortDescriptor(key: FetchingKey.creationDate,
-                                 ascending: true)]
+                NSSortDescriptor(
+                    key: Key.creationDate,
+                    ascending: false
+                )
+            ]
         case .past:
+            fetchOptions.predicate = NSPredicate(format: "(\(Key.creationDate) > %@)", request.date as NSDate)
             fetchOptions.sortDescriptors = [
-                NSSortDescriptor(key: FetchingKey.creationDate,
-                                 ascending: false)]
+                NSSortDescriptor(
+                    key: Key.creationDate,
+                    ascending: true
+                )
+            ]
         }
         var assets = [PHAsset]()
         let fetchResult = PHAsset.fetchAssets(with: .image, options: fetchOptions)
@@ -55,11 +68,25 @@ struct PhotoAssetFetcher {
             )
         }
     }
+    
+    private func requestAuthorization() async -> PHAuthorizationStatus {
+        return await withCheckedContinuation { continuation in
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+                continuation.resume(with: .success(status))
+            }
+        }
+    }
 }
 
 extension PhotoAssetFetcher {
-    private struct FetchingKey {
+    private struct Key {
         static let creationDate = "creationDate"
+    }
+}
+
+extension PhotoAssetFetcher {
+    enum Error: Swift.Error {
+        case notAuthorized
     }
 }
 
