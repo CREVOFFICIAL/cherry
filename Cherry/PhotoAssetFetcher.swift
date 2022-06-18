@@ -7,27 +7,25 @@
 
 import Photos
 
-struct PhotoAsset: Equatable {
-    typealias ID = String
-    
-    let id: ID
-    let creationDate: Date?
-    let modificationDate: Date?
-    
-    static func == (lhs: PhotoAsset, rhs: PhotoAsset) -> Bool {
-        return lhs.id == rhs.id
-    }
-}
-
-class PhotoAssetFetcher {
+final class PhotoAssetFetcher {
     struct Request {
         enum SortOrder {
             case latest
             case past
         }
-        let count: Int = 20
-        let sortOrder: SortOrder = .latest
-        let date: Date = .init()
+        let count: Int
+        let sortOrder: SortOrder
+        let date: Date
+        
+        init(
+            count: Int = 20,
+            sortOrder: SortOrder = .latest,
+            date: Date = .init()
+        ) {
+            self.count = count
+            self.sortOrder = sortOrder
+            self.date = date
+        }
     }
     
     func fetch(request: Request) async throws -> [PhotoAsset] {
@@ -87,11 +85,5 @@ extension PhotoAssetFetcher {
 extension PhotoAssetFetcher {
     enum Error: Swift.Error {
         case notAuthorized
-    }
-}
-
-struct _ImageLoader {
-    func load(from id: PhotoAsset.ID) async -> UIImage {
-        return .init()
     }
 }
