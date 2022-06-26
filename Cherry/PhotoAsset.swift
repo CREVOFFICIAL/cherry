@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PhotoAsset: Equatable {
+struct PhotoAsset: Equatable, Hashable {
     typealias ID = String
     
     let id: ID
