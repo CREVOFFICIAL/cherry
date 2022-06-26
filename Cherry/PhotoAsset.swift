@@ -11,8 +11,8 @@ struct PhotoAsset: Equatable, Hashable {
     typealias ID = String
     
     let id: ID
-    let creationDate: Date?
-    let modificationDate: Date?
+    var creationDate: Date?
+    var modificationDate: Date?
     
     static func == (lhs: PhotoAsset, rhs: PhotoAsset) -> Bool {
         return lhs.id == rhs.id

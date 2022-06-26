@@ -12,6 +12,7 @@
 		6F614D1F285DC19A00524681 /* PhotoAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F614D1E285DC19A00524681 /* PhotoAsset.swift */; };
 		6F614D21285DCB2E00524681 /* _ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F614D20285DCB2E00524681 /* _ImageLoader.swift */; };
 		6F614D23285DCC2B00524681 /* CherryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F614D22285DCC2B00524681 /* CherryService.swift */; };
+		6F8E31512868608900B8C78A /* PhotoAssetStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F8E31502868608900B8C78A /* PhotoAssetStore.swift */; };
 		D83CEA3D276B2DC200435CD0 /* HistogramClassifier.mm in Sources */ = {isa = PBXBuildFile; fileRef = D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */; };
 		D848B47127661017007A005E /* CherryApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D848B47027661017007A005E /* CherryApp.swift */; };
 		D848B47527661018007A005E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D848B47427661018007A005E /* Assets.xcassets */; };
@@ -32,6 +33,7 @@
 		6F614D1E285DC19A00524681 /* PhotoAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAsset.swift; sourceTree = "<group>"; };
 		6F614D20285DCB2E00524681 /* _ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _ImageLoader.swift; sourceTree = "<group>"; };
 		6F614D22285DCC2B00524681 /* CherryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CherryService.swift; sourceTree = "<group>"; };
+		6F8E31502868608900B8C78A /* PhotoAssetStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAssetStore.swift; sourceTree = "<group>"; };
 		D83CEA3A276B2DC200435CD0 /* Cherry-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Cherry-Bridging-Header.h"; sourceTree = "<group>"; };
 		D83CEA3B276B2DC200435CD0 /* HistogramClassifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = HistogramClassifier.h; sourceTree = "<group>"; };
 		D83CEA3C276B2DC200435CD0 /* HistogramClassifier.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = HistogramClassifier.mm; sourceTree = "<group>"; };
@@ -104,6 +106,7 @@
 				6F614D182859FFA100524681 /* PhotoAssetFetcher.swift */,
 				6F614D20285DCB2E00524681 /* _ImageLoader.swift */,
 				6F614D22285DCC2B00524681 /* CherryService.swift */,
+				6F8E31502868608900B8C78A /* PhotoAssetStore.swift */,
 			);
 			path = Cherry;
 			sourceTree = "<group>";
@@ -203,6 +206,7 @@
 				D848B48F27661530007A005E /* PhotoLibrary.swift in Sources */,
 				D848B48B276612EC007A005E /* ImageLoader.swift in Sources */,
 				6F614D21285DCB2E00524681 /* _ImageLoader.swift in Sources */,
+				6F8E31512868608900B8C78A /* PhotoAssetStore.swift in Sources */,
 				D848B4882766121F007A005E /* GalleryView.swift in Sources */,
 				6F614D192859FFA100524681 /* PhotoAssetFetcher.swift in Sources */,
 				D848B493276656B6007A005E /* ImageSliderView.swift in Sources */,
