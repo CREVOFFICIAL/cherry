@@ -14,15 +14,11 @@ struct GalleryView: View {
     
     var body: some View {
         Group {
-            if viewModel.authorizationStatus == .authorized {
-                PhotosCollectionView()
+            if viewModel.hasAuthorization {
+                GalleryGrid()
                     .environmentObject(viewModel)
             } else {
-                PhotoAuthorizationView(
-                    title: R.string.photoPermission,
-                    message: R.string.openSettings,
-                    buttonAction: openSettings
-                )
+                AuthorizationView()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -39,7 +35,7 @@ struct GalleryView: View {
     }
 }
 
-struct PhotosCollectionView: View {
+struct GalleryGrid: View {
     
     @EnvironmentObject var viewModel: PhotoLibrary
     
@@ -55,7 +51,7 @@ struct PhotosCollectionView: View {
                         Section(date) {
                             ForEach(assets, id: \.localIdentifier) { asset in
                                 NavigationLink(
-                                    destination: ImageSliderView(
+                                    destination: PhotoSliderView(
                                         assets: viewModel.binding(for: date),
                                         title: date,
                                         selectedID: asset.localIdentifier
@@ -89,19 +85,15 @@ struct PhotosCollectionView: View {
     }
 }
 
-struct PhotoAuthorizationView: View {
-    let title: String
-    let message: String
-    let buttonAction: () -> Void
-    
+struct AuthorizationView: View {
     var body: some View {
         ZStack(alignment: Alignment(horizontal: .center, vertical: .center)) {
             VStack(spacing: 16) {
-                Text(title)
+                Text(R.string.photoPermission)
                     .font(.system(.callout))
                     .multilineTextAlignment(.center)
-                Button(action: buttonAction) {
-                    Text(message)
+                Button(action: openSettings) {
+                    Text(R.string.openSettings)
                         .font(.system(.callout))
                         .foregroundColor(Color(UIColor.systemBlue))
                         .padding(6)
@@ -115,7 +107,7 @@ struct PhotoAuthorizationView: View {
     }
 }
 
-private extension GalleryView {
+private extension AuthorizationView {
     func openSettings() {
         guard let url = URL(string: UIApplication.openSettingsURLString),
               UIApplication.shared.canOpenURL(url) else { return }

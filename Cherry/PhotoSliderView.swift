@@ -1,5 +1,5 @@
 //
-//  ImageSliderView.swift
+//  PhotoSlider.swift
 //  Cherry
 //
 //  Created by junyeong-cho on 2021/12/13.
@@ -8,7 +8,7 @@
 import Photos
 import SwiftUI
 
-struct ImageSliderView: View {
+struct PhotoSliderView: View {
     
     private let title: String
     private let selectedID: String
@@ -22,59 +22,59 @@ struct ImageSliderView: View {
     var body: some View {
         GeometryReader { proxy in
             VStack(spacing: 0) {
-                GeometryReader { proxy in
-                    TabView(selection: $focusedID) {
-                        ForEach(assets, id: \.localIdentifier) { asset in
-                            AsyncImage(
-                                phasset: asset,
-                                size: CGSize(width: proxy.size.width * UIScreen.main.scale,
-                                             height: proxy.size.height * UIScreen.main.scale),
-                                placeholder: { ProgressView() },
-                                image: {
-                                    Image(uiImage: $0)
-                                        .resizable()
-                                }
-                            )
-                                .aspectRatio(contentMode: .fit)
-                                .tag(asset.localIdentifier)
-                        }
+                TabView(selection: $focusedID) {
+                    GeometryReader { proxy in
+//                        ForEach(assets, id: \.localIdentifier) { asset in
+//                            AsyncImage(
+//                                phasset: asset,
+//                                size: CGSize(width: proxy.size.width * UIScreen.main.scale,
+//                                             height: proxy.size.height * UIScreen.main.scale),
+//                                placeholder: { ProgressView() },
+//                                image: {
+//                                    Image(uiImage: $0)
+//                                        .resizable()
+//                                }
+//                            )
+//                                .aspectRatio(contentMode: .fit)
+//                                .tag(asset.localIdentifier)
+//                        }
                     }
                     .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
                 }
                 ScrollViewReader { proxy in
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 2) {
-                            ForEach(assets, id: \.localIdentifier) { asset in
-                                AsyncImage(
-                                    phasset: asset,
-                                    size: CGSize(width: C.cellSize.width * UIScreen.main.scale,
-                                                 height: C.cellSize.height * UIScreen.main.scale),
-                                    placeholder: { ProgressView() },
-                                    image: {
-                                        Image(uiImage: $0)
-                                            .resizable()
-                                    }
-                                )
-                                    .frame(width: C.cellSize.width,
-                                           height: C.cellSize.height)
-                                    .border(focusedID == asset.localIdentifier ? Color(UIColor.systemBlue) : Color.clear, width: 2)
-                                    .overlay(
-                                        VStack {
-                                            if removeIDs.contains(asset.localIdentifier) {
-                                                Image(systemName: R.image.multiply)
-                                                    .resizable()
-                                                    .frame(width: C.multiplyImageSize.width, height: C.multiplyImageSize.height)
-                                                    .foregroundColor(Color(UIColor.systemRed))
-                                            }
-                                        }
-                                            .frame(width: C.cellSize.width, height: C.cellSize.height)
-                                            .background(removeIDs.contains(asset.localIdentifier) ? .black.opacity(0.1) : .clear)
-                                    )
-                                    .clipShape(Rectangle())
-                                    .onTapGesture {
-                                        self.focusedID = asset.localIdentifier
-                                    }
-                            }
+//                            ForEach(assets, id: \.localIdentifier) { asset in
+//                                AsyncImage(
+//                                    phasset: asset,
+//                                    size: CGSize(width: C.cellSize.width * UIScreen.main.scale,
+//                                                 height: C.cellSize.height * UIScreen.main.scale),
+//                                    placeholder: { ProgressView() },
+//                                    image: {
+//                                        Image(uiImage: $0)
+//                                            .resizable()
+//                                    }
+//                                )
+//                                    .frame(width: C.cellSize.width,
+//                                           height: C.cellSize.height)
+//                                    .border(focusedID == asset.localIdentifier ? Color(UIColor.systemBlue) : Color.clear, width: 2)
+//                                    .overlay(
+//                                        VStack {
+//                                            if removeIDs.contains(asset.localIdentifier) {
+//                                                Image(systemName: R.image.multiply)
+//                                                    .resizable()
+//                                                    .frame(width: C.multiplyImageSize.width, height: C.multiplyImageSize.height)
+//                                                    .foregroundColor(Color(UIColor.systemRed))
+//                                            }
+//                                        }
+//                                            .frame(width: C.cellSize.width, height: C.cellSize.height)
+//                                            .background(removeIDs.contains(asset.localIdentifier) ? .black.opacity(0.1) : .clear)
+//                                    )
+//                                    .clipShape(Rectangle())
+//                                    .onTapGesture {
+//                                        self.focusedID = asset.localIdentifier
+//                                    }
+//                            }
                         }
                     }
                     .frame(height: C.sliderHeight)
@@ -89,8 +89,10 @@ struct ImageSliderView: View {
                     }
                 }
             }
-            .navigationBarTitle(title)
             .toolbar {
+                ToolbarItem(placement: .principal) {
+                    Text(title)
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Image(systemName: removeIDs.contains(focusedID) ? R.image.checkmark : R.image.plus)
                         .foregroundColor(Color(UIColor.systemBlue))
@@ -146,6 +148,12 @@ struct ImageSliderView: View {
         }
     }
     
+}
+
+struct ThumbnailScrollBar: View {
+    var body: some View {
+        EmptyView()
+    }
 }
 
 fileprivate struct C {
